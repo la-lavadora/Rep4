@@ -268,7 +268,57 @@ $(function() {
     }
     reorder();    
 
+    // When user receives likes
+	  $('.userslikes').each(function() {
+  		var that = $(this);
+  		var usernames = $(this).data('usernames').split(",");
+  		var times = $(this).data('likes').split(",");
 
+  		for(var i=0; i<times.length; i++) 
+  		{ 
+  			times[i] = +times[i]; 
+
+  			themsg = usernames[i] + " gefällt dein Beitrag";
+
+  			setTimeout(function(themsg) {
+  				that.text(parseInt(that.text()) + 1);
+  				alertify.success(themsg)
+
+  			}, times[i], themsg);
+  		} 		
+	  });
+
+    // When others receive likes
+	  $('.otherslikes').each(function() {
+  		var that = $(this);
+  		var times = $(this).data('likes').split(",");
+
+  		for(var i=0; i<times.length; i++) 
+  		{ 
+  			times[i] = +times[i]; 
+
+  			setTimeout(function () {
+  				that.text(parseInt(that.text()) + 1);
+  			}, times[i]);
+
+  		} 
+	  });
+
+
+    // Initialize like buttons
+	  $('.btn-like').on('click', function() {
+		  $(this).prev().text(parseInt($(this).prev().text()) + 1);
+      // Like buttons can only be clicked once
+		  $(this).attr("disabled", true);
+	  });
+
+    // Initalize Masonry plugin
+    // For display of user and other players boxes in columns without gaps
+		$('#task').masonry({
+		  itemSelector : '.entry',
+		  columnWidth : 10
+		});
+	  
     // Redirect, default after 180000ms = 180s = 3min
     setTimeout(function() {
     
