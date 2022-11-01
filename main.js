@@ -30,31 +30,7 @@ $(function() {
     // Length of the group introduction task in milliseconds. Can be changed to any number (in ms). Default: 180000 (3min) 
     settings.tasklength = 120000 ; 
 
-	
-	// **Number** **of** **"likes"**    
-    // Each received "like" is indicated by the timepoint (in ms) at which the "like" will appear. To change the number of "likes" in each condition, add or remove timepoints. Make sure that every timepoint (except the first) is preceded by a single comma. 
-	// In cases with only 1 "like," a second "like" is added with time point 9999999. This "like" is added for programming purposes and is never executed, as it is outside the task time
 
-    // In condition 1, the participant will receive 1 like at the following timepoint (in ms). Default: [12000, 9999999]
-     settings.condition_1_likes = [9999999,9999999]; 
-
-    // In condition 2, user will receive 6 likes at the following timepoints (in ms). Default: [10000, 15000,35000,80000,1320000,150000]
-    settings.condition_2_likes = [18000, 25000, 29000, 35000, 50000, 9999999, 9999999];  
-    
-    // In condition 3, user will receive 9 likes at the following timepoints (in ms). Default: [10000, 11000,15000,35000,80000,100000,110000,150000,20000]
-    settings.condition_3_likes = [10000, 11000,15000,35000,80000,100000,110000,150000,20000]; 
-
-	// **Others' likes**     
-	// To keep the total distribution of "likes" constant across conditions, The "likes" received by one group member can be adjusted according to the participant's. By default, the other group member receives 9 "likes" in the participant-ostracism condition, 5 in the participant-inclusion condtion, and 1 in the participant-overinclusion condtion.
-	 settings.condition_1_adjusted_likes = [12000, 14000,15000,35000,80000,9999999,9999999,9999999,9999999]; // 9
-	 settings.condition_2_adjusted_likes = [12000, 14000,15000,35000,80000]; // 5
-	 settings.condition_3_adjusted_likes = [12000, 9999999]; //1	
-	
-    // Usernames by which the participant will receive "likes"
-	// If group member names are changed, these should be changed accordingly.
-    settings.likes_by = ['Julia','Felix','Sarah','Max','Nicola']; 
-  }
-  
   // -------------------
   // Above were the basic parameters you can adjust using the instructions. The remaining code is also annotated, but we do not recommend changing it, unless you are comfortable with web programming.
   // -------------------
@@ -227,7 +203,7 @@ $(function() {
 			  "avatar": 'avatars/' + window.avatar + '.png',
 			  "username": window.username,
 			  "text": window.description,
-			  "likes": window.settings.condition_likes,
+
 			  "usernames": window.settings.likes_by
 			}
 		  ]
@@ -268,72 +244,7 @@ $(function() {
     }
     reorder();    
 
-    // When user receives likes
-	  $('.userslikes').each(function() {
-  		var that = $(this);
-  		var usernames = $(this).data('usernames').split(",");
-  		var times = $(this).data('likes').split(",");
 
-  		for(var i=0; i<times.length; i++) 
-  		{ 
-  			times[i] = +times[i]; 
-
-  			themsg = usernames[i] + " gefällt dein Beitrag";
-
-  			setTimeout(function(themsg) {
-  				that.text(parseInt(that.text()) + 1);
-  				alertify.success(themsg)
-
-  			}, times[i], themsg);
-  		} 		
-	  });
-
-    // When others receive likes
-	  $('.otherslikes').each(function() {
-  		var that = $(this);
-  		var times = $(this).data('likes').split(",");
-
-  		for(var i=0; i<times.length; i++) 
-  		{ 
-  			times[i] = +times[i]; 
-
-  			setTimeout(function () {
-  				that.text(parseInt(that.text()) + 1);
-  			}, times[i]);
-
-  		} 
-	  });
-
-
-    // Initialize like buttons
-	  $('.btn-like').on('click', function() {
-		  $(this).prev().text(parseInt($(this).prev().text()) + 1);
-      // Like buttons can only be clicked once
-		  $(this).attr("disabled", true);
-	  });
-
-    // Initalize Masonry plugin
-    // For display of user and other players boxes in columns without gaps
-		$('#task').masonry({
-		  itemSelector : '.entry',
-		  columnWidth : 10
-		});
-	  
-    // Redirect, default after 180000ms = 180s = 3min
-    setTimeout(function() {
-    
-    $(window).unbind('beforeunload');
-    
-    $('#final-continue').show();
-
-    $('#timer').text('00:00');
-    
-    $('#final-continue').on('click', function() {
-
-      // Redirect link
-      location.href = window.redirect+'&p='+window.participant+'&c='+window.condition+'&u='+encodeURI(window.username)+'&av='+window.avatarexport+'&d='+encodeURI(window.description);
-
-    });
     
     },window.settings.tasklength); // timing for task
 
