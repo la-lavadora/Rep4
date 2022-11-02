@@ -246,7 +246,7 @@ $(function() {
 
 
     
-    },window.settings.tasklength); // timing for task
+    }.window.settings.tasklength); // timing for task
 
   }
 	
